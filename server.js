@@ -3,6 +3,13 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
+var fs = require('fs');
+var data = fs.readFileSync('data.json');
+
+var directoryName = __dirname;
+
+var currPath = process.cwd();
+
 
 io.on('connection', function(socket) {
     console.log('a user connected');
@@ -17,13 +24,29 @@ io.on('connection', function(socket) {
 
 
 });
+// app.use(express.static('./src'))
 
+// app.get('/', function(req, res) {
 
-app.get('/', function(req, res) {
-res.sendFile('index.html', { root: path.join(__dirname, 'src') });      
+// // res.send(directoryName);      
+// });
+//app.use(express.static('/', __dirname + '/../src'));
+
+http.listen(3000, function() { //add ip after port
+    console.log('Listening to port:  ' + 3000);
+    console.log('this is the path: ' + currPath)
+    console.log(directoryName);
 });
 
-http.listen(3000, function() {
-    console.log('listening on *:3000');
 
+
+
+app.get('/', function (req, res) {
+
+res.sendFile(__dirname+'/index.html');
+
+    fs.writeFile('data.json', directoryName);
 });
+
+
+
